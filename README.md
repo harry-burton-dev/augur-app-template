@@ -37,6 +37,10 @@ Backstage does steps 1 and 2 for you: **Create** → **New AUGUR app** makes `au
 4. **Push it.** Commit and push to `main`. Then, in the repository's settings:
    - Secrets: `PACKAGES_READ_TOKEN` (reads AUGUR's packages) and `APP_RELEASES_TOKEN` (tells AUGUR's
      release feed about a new release).
+   - Secret `RELEASE_TOKEN`: a fine-grained token for this repository with Contents and Pull requests
+     write, so the Version packages pull request opens itself and its CI starts.
+   - Actions → General → Workflow permissions: **Read and write**, with **Allow GitHub Actions to create
+     and approve pull requests** ticked (without `RELEASE_TOKEN`, the Release workflow needs it).
    - Add the repository to AUGUR's `release/app-repos.json` in a pull request there, so deployments
      trust what it releases (AUGUR's ADR 0047).
 
@@ -65,5 +69,5 @@ their types in `service/src/api-types.ts`, and replace this section of the READM
 | Release | Merging Version packages | The beta release `app/starter@<version>`, then AUGUR's feed lists it |
 
 Every pull request carries a changeset (`pnpm changeset`). The first one, `.changeset/first-release.md`,
-releases the app as 0.1.0. The template repository itself releases nothing: the three release workflows
+releases the app as 0.1.0. An empty changeset (`pnpm changeset --empty`) never holds back a release. The template repository itself releases nothing: the three release workflows
 skip a repository marked as a template.
