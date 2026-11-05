@@ -38,7 +38,8 @@ describe('the app', () => {
   });
 
   it("says so when the service isn't answering", async () => {
-    await act(async () => app.mount(el, fakeContext({ fetch: answering(502) })));
+    // The app keeps what it loaded for each floor across mounts, so this one asks on a floor of its own.
+    await act(async () => app.mount(el, fakeContext({ fetch: answering(502), workspace: { id: 'ws-down' } })));
     await settle();
     expect(el.textContent).toContain(`${manifest.name} isn’t answering`);
     await act(async () => app.unmount(el));
