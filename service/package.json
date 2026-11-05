@@ -1,0 +1,24 @@
+{
+  "name": "@apps/starter",
+  "version": "0.0.0",
+  "private": true,
+  "license": "UNLICENSED",
+  "type": "module",
+  "description": "Starter's service: its API behind the gateway at /api/starter.",
+  "scripts": {
+    "build": "tsc -p tsconfig.json && cp ../manifest.json dist/manifest.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "dev": "node --watch --experimental-strip-types src/index.ts",
+    "start": "node dist/index.js",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@augur/service-kit": "npm:@harry-burton-dev/augur-service-kit@^0.13.0",
+    "fastify": "^5.6.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "typescript": "^5.6.0",
+    "vitest": "^3.2.0"
+  }
+}
