@@ -59,7 +59,6 @@ their types in `service/src/api-types.ts`, and replace this section of the READM
 | `service/src/api-types.ts` | The wire types, written once: the service answers with them and the frontend reads them |
 | `frontend/` | The micro frontend the shell mounts at `/starter` (`@apps/starter-frontend`): `src/entry.tsx` is what the shell loads, `src/app.tsx` its places |
 | `run/index.ts` | Its scenarios for AUGUR's run suite (augur-run): give each a RUN id there when the app joins the proving run |
-| `docs/decisions/` | Decisions that only concern this app |
 
 `pnpm lint`, `pnpm typecheck`, `pnpm test` and `pnpm build` run everything; set `NODE_AUTH_TOKEN` first.
 
