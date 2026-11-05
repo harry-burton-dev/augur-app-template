@@ -2,6 +2,7 @@
 //   pnpm make-app <id> [--name "Display name"]
 // Run it once, in a repository you made from the template ("Use this template" on GitHub).
 import { existsSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { execFileSync } from 'node:child_process';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -23,6 +24,7 @@ if (!name) fail('--name needs a value.');
 // Every file that names the template's app. Anything else is the same in every app.
 const files = [
   'manifest.json',
+  'catalog-info.yaml',
   'package.json',
   'service/package.json',
   'frontend/package.json',
@@ -35,12 +37,22 @@ const files = [
   'README.md',
   'AGENTS.md',
 ];
+// The app's own repository, for its catalog entry: as `augur-app catalog` finds it.
+const remote = () => {
+  try {
+    return execFileSync('git', ['remote', 'get-url', 'origin'], { cwd: root, encoding: 'utf8' });
+  } catch {
+    return '';
+  }
+};
+const repo = process.env.GITHUB_REPOSITORY || remote().trim().match(/github\.com[:/]([^/\s]+\/[^/\s]+?)(?:\.git)?\/?$/)?.[1];
 const TEMPLATE_ONLY = /<!-- template-only -->[\s\S]*?<!-- \/template-only -->\n*/g;
 for (const file of files) {
   const path = join(root, file);
   if (!existsSync(path)) continue;
   const text = readFileSync(path, 'utf8')
     .replace(TEMPLATE_ONLY, '')
+    .replaceAll('harry-burton-dev/augur-app-template', repo ?? 'harry-burton-dev/augur-app-template')
     .replaceAll('augur-app-starter', `augur-${id}`)
     .replaceAll('Starter', name)
     .replaceAll('starter', id);
@@ -55,5 +67,6 @@ rmSync(join(root, 'scripts/make-app.mjs'));
 console.log(`
 ${name} is ready, as the app "${id}" at /${id}.
 
-  pnpm install && pnpm test      check it works
+  pnpm install && pnpm test      check it works${repo ? '' : `
+  GITHUB_REPOSITORY=<owner>/<repo> pnpm exec augur-app catalog   no GitHub remote found: write the catalog entry`}
   README.md                      run it in AUGUR's shell, then make it yours`);

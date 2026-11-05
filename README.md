@@ -53,7 +53,8 @@ their types in `service/src/api-types.ts`, and replace this section of the READM
 
 | Path | What it is |
 | --- | --- |
-| `manifest.json` | How the registry lists the app: its route, entry, floors, the SDK range it works with. `$schema` points at AUGUR's published schema, so your editor checks it |
+| `manifest.json` | How the registry lists the app: its route, entry, floors, the SDK range it works with. `$schema` points at the schema in `@augur/app-tools`, the one your SDK range goes with, so your editor checks it |
+| `catalog-info.yaml` | The app's entry in Backstage's catalog, written from the manifest and the package.json files by `augur-app catalog`. Don't edit it: CI checks it's current (`pnpm check:catalog`) and Version packages rewrites it |
 | `service/` | The app's own API behind the gateway at `/api/starter` (`@apps/starter`): `src/app.ts` its routes, `src/index.ts` starts it |
 | `service/src/api-types.ts` | The wire types, written once: the service answers with them and the frontend reads them |
 | `frontend/` | The micro frontend the shell mounts at `/starter` (`@apps/starter-frontend`): `src/entry.tsx` is what the shell loads, `src/app.tsx` its places |
