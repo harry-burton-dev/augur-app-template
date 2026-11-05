@@ -1,5 +1,5 @@
 {
-  "$schema": "https://raw.githubusercontent.com/harry-burton-dev/augur/main/contracts/manifest.schema.json",
+  "$schema": "./node_modules/@augur/app-tools/manifest.schema.json",
   "id": "starter",
   "name": "Starter",
   "route": "/starter",
