@@ -5,7 +5,7 @@
   "route": "/starter",
   "entry": "/apps/starter/entry.js",
   "version": "0.0.0",
-  "sdk": "^1.11.0",
+  "sdk": "^2.0.0",
   "description": "What Starter is for, in a line",
   "icon": "apps",
   "floors": ["personal", "team", "org"]
