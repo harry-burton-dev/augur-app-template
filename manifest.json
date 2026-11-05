@@ -1,0 +1,12 @@
+{
+  "$schema": "https://raw.githubusercontent.com/harry-burton-dev/augur/main/contracts/manifest.schema.json",
+  "id": "starter",
+  "name": "Starter",
+  "route": "/starter",
+  "entry": "/apps/starter/entry.js",
+  "version": "0.0.0",
+  "sdk": "^1.11.0",
+  "description": "What Starter is for, in a line",
+  "icon": "apps",
+  "floors": ["personal", "team", "org"]
+}
