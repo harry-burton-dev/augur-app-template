@@ -15,6 +15,9 @@ for AUGUR's run suite. It works as it is; you only give it a name.
 You need Node 22, pnpm 10, a GitHub token that can read GitHub Packages (classic, `read:packages`) and a
 checkout of [AUGUR](https://github.com/harry-burton-dev/augur) next to where your app will go.
 
+Backstage does steps 1 and 2 for you: **Create** → **New AUGUR app** makes `augur-<id>`, names it (the
+**Name the app** workflow) and adds it to the catalog. Clone it and carry on from step 3. By hand:
+
 1. **Make the repository.** On GitHub, **Use this template** → **Create a new repository**, named
    `augur-<id>`. Clone it next to your AUGUR checkout.
 2. **Name it.** The id is the app's route (`/<id>`) and its prefix behind the gateway (`/api/<id>`): 2 to
