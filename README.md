@@ -44,6 +44,9 @@ Backstage does steps 1 and 2 for you: **Create** → **New AUGUR app** makes `au
    - Add the repository to AUGUR's `release/app-repos.json` in a pull request there, so deployments
      trust what it releases (AUGUR's ADR 0047).
 
+How long the machine's part of steps 2 and 3 takes is timed by **Actions → Time to the shell** in the template
+repository (alpha goal 6: 15 minutes in all).
+
 Then make it yours: rename the places in `frontend/src/app.tsx`, add routes to `service/src/app.ts`, keep
 their types in `service/src/api-types.ts`, and replace this section of the README with what the app is for.
 <!-- /template-only -->
