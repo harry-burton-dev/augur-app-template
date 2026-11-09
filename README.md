@@ -91,7 +91,7 @@ with what the app is for.
 | `run/index.ts` | Its scenarios for AUGUR's run suite (augur-run): give each a RUN id there when the app joins the proving run |
 
 `pnpm lint`, `pnpm typecheck`, `pnpm test`, `pnpm build` and `pnpm check:app` run everything; set
-`NODE_AUTH_TOKEN` first.
+`NODE_AUTH_TOKEN` first, and for `check:app` also `GITHUB_REPOSITORY` (`owner/repo`, which names the image; CI sets it).
 
 ## Releases
 
