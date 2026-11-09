@@ -23,7 +23,14 @@ export const scenarios: AppScenario[] = [
     title: 'Open Starter and hear from its service',
     goal: 'An app made from the template works in a real deployment',
     status: 'waiting',
-    steps: ['Sign in', 'Open Starter from the launcher', 'Read the greeting from its service', 'Send a notification and find it in the stream'],
-    proof: 'A screenshot of the greeting, and the notification in the stream',
+    steps: [
+      'Sign in',
+      'Open Starter from the app bar',
+      'Read the greeting its service gives, by the person’s name',
+      'Run its Ask again command from the command palette, and read the greeting again',
+      'Open its About panel and read its Details',
+      'Send a notification and find it in the stream',
+    ],
+    proof: 'A screenshot of the greeting and the About panel, the gateway’s record of the two calls to /api/starter/v1/greeting, and the notification in the stream',
   },
 ];

@@ -1,6 +1,7 @@
 name: CI
-# Every pull request: lint, typecheck, test and build, in one job (a few minutes). Images are built only
-# by the release, dev build and preview workflows.
+# Every pull request: lint, typecheck, test and build, in one job (a few minutes), and the app's contract-3
+# files checked: the manifest, each part's Score file and the release file they make (`pnpm check:app`).
+# Images are built only by the release, dev build and preview workflows.
 on:
   pull_request:
   workflow_dispatch:
@@ -43,6 +44,7 @@ jobs:
           fi
       - run: pnpm lint
       - run: pnpm check:catalog
+      - run: pnpm check:app
       - run: pnpm typecheck
       - run: pnpm test
       - run: pnpm build

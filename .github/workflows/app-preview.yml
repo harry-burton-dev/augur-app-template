@@ -5,7 +5,7 @@ name: App previews
 on:
   pull_request:
     types: [opened, synchronize, reopened, closed]
-    paths: ['frontend/**', 'service/**', 'manifest.json', 'Dockerfile']
+    paths: ['frontend/**', 'service/**', 'score/**', 'manifest.json', 'Dockerfile']
 concurrency:
   group: app-preview-${{ github.event.pull_request.number }}
   cancel-in-progress: true
@@ -48,7 +48,7 @@ jobs:
           version=$(pnpm exec augur-app preview "$PR_NUMBER" "$GITHUB_RUN_NUMBER")
           pnpm build && pnpm release-out
           pnpm exec augur-app bundle preview > "$RUNNER_TEMP/bundle.json"
-          pnpm exec augur-app publish "$RUNNER_TEMP/bundle.json"
+          pnpm exec augur-app release publish "$RUNNER_TEMP/bundle.json"
           pnpm exec augur-app clean-previews "$PR_NUMBER" "app/$(jq -r .id manifest.json)@$version"
         env:
           GH_TOKEN: ${{ github.token }}
