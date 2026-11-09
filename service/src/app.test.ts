@@ -1,6 +1,6 @@
 import {
-  appClientId,
   CALLER_TOKEN_HEADER,
+  callerAudienceOf,
   callerCheckFor,
   callerHeaders,
   callerOfService,
@@ -23,11 +23,11 @@ const sam = { id: 'u1', name: 'Sam Okafor', departments: [], roles: [], workspac
 // The gateway's address inside the deployment: not loopback, which the service kit believes as it comes.
 const fromGateway = '172.18.0.9';
 
-/** The app as it runs behind the gateway: it believes only a caller the gateway signed for `app-<id>`. */
+/** The app as it runs behind the gateway: it believes only a caller the gateway signed for `app-<id>` (`callerAudienceOf`, on contract 3). */
 const behindGateway = async () => {
   const gateway = callerSigner();
   const kept = memoryEvents();
-  const app = await buildApp({ manifest, callers: callerCheckFor(gateway, appClientId(manifest.id)), events: kept });
+  const app = await buildApp({ manifest, callers: callerCheckFor(gateway, callerAudienceOf(manifest)), events: kept });
   return { app, gateway, kept };
 };
 
@@ -72,7 +72,7 @@ describe('the service', () => {
 
   it('greets with the setting the admin gave, else the manifest’s default', async () => {
     const gateway = callerSigner();
-    const callers = callerCheckFor(gateway, appClientId(manifest.id));
+    const callers = callerCheckFor(gateway, callerAudienceOf(manifest));
     const setting = (manifest.contributes as { settings: { id: string; default: string }[] }).settings.find((s) => s.id === 'greeting')!;
     const byDefault = await buildApp({ manifest, callers, env: {} });
     const given = await buildApp({ manifest, callers, env: { GREETING: 'Good morning' } });
@@ -96,7 +96,7 @@ describe('events AUGUR pushes to the part', () => {
 
   it('keeps each event once, however often it is delivered', async () => {
     const { app, gateway, kept } = await behindGateway();
-    const headers = { ...(await signedCallerHeaders(gateway, callerOfService('events'), appClientId(manifest.id))), [IDEMPOTENCY_KEY_HEADER]: eventDeliveryKey(event) };
+    const headers = { ...(await signedCallerHeaders(gateway, callerOfService('events'), callerAudienceOf(manifest))), [IDEMPOTENCY_KEY_HEADER]: eventDeliveryKey(event) };
     const first = await deliver(app, headers);
     const again = await deliver(app, headers);
     expect(first.statusCode).toBe(204);
@@ -108,7 +108,7 @@ describe('events AUGUR pushes to the part', () => {
     const { app, gateway, kept } = await behindGateway();
     const key = { [IDEMPOTENCY_KEY_HEADER]: eventDeliveryKey(event) };
     const person = await deliver(app, { ...(await delegated(gateway)), ...key });
-    const another = await deliver(app, { ...(await signedCallerHeaders(gateway, callerOfService('identity'), appClientId(manifest.id))), ...key });
+    const another = await deliver(app, { ...(await signedCallerHeaders(gateway, callerOfService('identity'), callerAudienceOf(manifest))), ...key });
     const nobody = await deliver(app, key);
     const malformed = await app.inject({ remoteAddress: fromGateway, method: 'POST', url: PART_EVENTS_PATH, headers: { ...(await delegated(gateway)), ...key }, payload: { nothing: true } });
     expect([person.statusCode, another.statusCode, nobody.statusCode, malformed.statusCode]).toEqual([403, 403, 401, 403]);
@@ -117,7 +117,7 @@ describe('events AUGUR pushes to the part', () => {
 
   it('needs the idempotency key to keep an event once', async () => {
     const { app, gateway, kept } = await behindGateway();
-    const res = await deliver(app, await signedCallerHeaders(gateway, callerOfService('events'), appClientId(manifest.id)));
+    const res = await deliver(app, await signedCallerHeaders(gateway, callerOfService('events'), callerAudienceOf(manifest)));
     expect(res.statusCode).toBe(400);
     expect(kept.all()).toEqual([]);
   });

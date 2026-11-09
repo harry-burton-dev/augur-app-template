@@ -10,14 +10,14 @@
   "scripts": {
     "make-app": "node scripts/make-app.mjs",
     "build": "pnpm -r build",
-    "test": "pnpm -r test && node --test scripts/*.test.mjs",
+    "test": "pnpm -r test",
     "typecheck": "pnpm -r typecheck",
     "lint": "eslint .",
     "changeset": "changeset",
     "version-packages": "changeset version && node scripts/sync-version.mjs && augur-app catalog",
     "check:catalog": "augur-app catalog --check",
     "release-out": "pnpm --filter ./service deploy --prod --legacy out",
-    "check:app": "augur-app validate && node scripts/release.mjs describe > /dev/null"
+    "check:app": "augur-app validate && augur-app release describe > /dev/null"
   },
   "devDependencies": {
     "@augur/app-tools": "npm:@harry-burton-dev/augur-app-tools@^0.5.0",

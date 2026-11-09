@@ -12,6 +12,8 @@
       "augur.dev/release-unit": "app/starter",
       "augur.dev/version": "0.0.0",
       "augur.dev/app-id": "starter",
+      "augur.dev/route": "/starter",
+      "augur.dev/contract": "3",
       "augur.dev/floors": "personal,team,org",
       "augur.dev/scopes": "events:subscribe"
     }

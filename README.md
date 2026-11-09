@@ -64,13 +64,14 @@ repository (alpha goal 6: 15 minutes in all).
   token, the floor and the app's id, and the gateway checks the app is on for the person there, then
   signs a delegated caller (the person, the floor, the app and its scopes, for `app-<id>` only) and sends
   the call to the inbound part, `score/web.score.yaml`. The part believes only that signed caller
-  (`service/src/app.ts`) and answers; the shell hands the bytes back to the worker.
+  (`service/src/app.ts`; the service kit's `appServer` checks the audience) and answers; the shell hands
+  the bytes back to the worker.
 - **Events.** With `events:subscribe`, AUGUR pushes each event the app may see to the inbound part as
   `POST /augur/events`, signed as its events service, with an `Idempotency-Key`. The part keeps each key
   once and answers 204 (`service/src/events.ts`); anything else, and the event comes again.
-- **Install.** A deployment installs the release file the Release workflow attaches (release v2): the
-  manifest, the frontend by digest, each part's Score file with its image pinned by digest, who signed
-  it, and the asks an admin agrees to. The runner runs `migrate` to completion, starts `web`, waits for
+- **Install.** A deployment installs the release file the Release workflow attaches (release v2, written
+  by `augur-app release publish`): the manifest, the frontend by digest, each part's Score file with its
+  image pinned by digest, who signed it, and the asks an admin agrees to. The runner runs `migrate` to completion, starts `web`, waits for
   its `/healthz` to answer the release's version, then switches over.
 
 Then make it yours: draw your screens in `frontend/src/screen.ts`, declare their places, commands and
@@ -84,10 +85,9 @@ with what the app is for.
 | `manifest.json` | What the shell draws for the app (places, commands, About sections), its settings, the scopes it asks for and the floors it works on (manifest 3). `$schema` points at the schema in `@augur/app-tools`, so your editor checks it; `pnpm check:app` checks it as the registry will |
 | `score/` | One Score file per part: `web` (the inbound service, with its database, setting and scratch folder) and `migrate` (a job that runs the migrations before each install switches over). Each says what the part asks for and its limits; `image: .` is pinned by digest in the release |
 | `catalog-info.yaml` | The app's entry in Backstage's catalog, written from the manifest and the package.json files by `augur-app catalog`. Don't edit it: CI checks it's current (`pnpm check:catalog`) and Version packages rewrites it |
-| `service/` | The image both parts run (`@apps/starter`): `src/app.ts` its routes and `/healthz`, `src/events.ts` the events pushed to it, `src/migrations.ts` its schema, `src/index.ts` and `src/migrate.ts` what each part starts |
+| `service/` | The image both parts run (`@apps/starter`): `src/app.ts` its routes and `/healthz`, `src/events.ts` the events pushed to it, `src/migrations.ts` its schema, `src/index.ts` and `src/migrate.ts` what each part starts, each reaching the app's database with the service kit's `appDatabaseFromEnv` (none under `pnpm dev:app`) |
 | `service/src/api-types.ts` | The wire types, written once: the service answers with them, its OpenAPI document describes them and the frontend reads them |
 | `frontend/` | What the shell runs in the app's worker (`@apps/starter-frontend`): `src/entry.ts` its `start(ctx)`, `src/screen.ts` what it draws |
-| `scripts/release.mjs` | Writes the release file (release v2) from the manifest, the Score files and what the build pushed |
 | `run/index.ts` | Its scenarios for AUGUR's run suite (augur-run): give each a RUN id there when the app joins the proving run |
 
 `pnpm lint`, `pnpm typecheck`, `pnpm test`, `pnpm build` and `pnpm check:app` run everything; set

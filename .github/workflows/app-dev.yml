@@ -48,7 +48,7 @@ jobs:
           version=$(pnpm exec augur-app dev "$GITHUB_RUN_NUMBER")
           pnpm build && pnpm release-out
           pnpm exec augur-app bundle dev > "$RUNNER_TEMP/bundle.json"
-          node scripts/release.mjs publish "$RUNNER_TEMP/bundle.json"
+          pnpm exec augur-app release publish "$RUNNER_TEMP/bundle.json"
           pnpm exec augur-app clean-devs "app/$(jq -r .id manifest.json)@$version"
           echo "Dev build $version: a preview server set to take its dev builds installs it at its next check." >> "$GITHUB_STEP_SUMMARY"
         env:
