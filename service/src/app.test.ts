@@ -110,7 +110,8 @@ describe('events AUGUR pushes to the part', () => {
     const person = await deliver(app, { ...(await delegated(gateway)), ...key });
     const another = await deliver(app, { ...(await signedCallerHeaders(gateway, callerOfService('identity'), appClientId(manifest.id))), ...key });
     const nobody = await deliver(app, key);
-    expect([person.statusCode, another.statusCode, nobody.statusCode]).toEqual([403, 403, 403]);
+    const malformed = await app.inject({ remoteAddress: fromGateway, method: 'POST', url: PART_EVENTS_PATH, headers: { ...(await delegated(gateway)), ...key }, payload: { nothing: true } });
+    expect([person.statusCode, another.statusCode, nobody.statusCode, malformed.statusCode]).toEqual([403, 403, 401, 403]);
     expect(kept.all()).toEqual([]);
   });
 

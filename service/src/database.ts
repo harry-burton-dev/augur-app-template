@@ -1,4 +1,4 @@
-import { loadConfig } from '@augur/service-kit';
+import { loadConfig, statementTimeoutMs, steadyPool } from '@augur/service-kit';
 import pg from 'pg';
 
 /**
@@ -12,13 +12,13 @@ export const databaseFromEnv = (service: string, env: NodeJS.ProcessEnv = proces
   loadConfig(service, [{ name: 'DATABASE_PASSWORD', about: 'the app’s database password, as a file', required: true, secret: true }], env);
   const schema = env.DATABASE_SCHEMA;
   if (!schema) throw new Error('DATABASE_SCHEMA is not set: the runner gives it with the database.');
-  const pool = new pg.Pool({
+  const pool = steadyPool(new pg.Pool({
     host: env.DATABASE_HOST,
     port: Number(env.DATABASE_PORT || 5432),
     database: env.DATABASE_NAME,
     user: env.DATABASE_USER,
     password: env.DATABASE_PASSWORD,
     max: Number(env.DATABASE_CONNECTIONS || 0) || undefined,
-  });
+  }), undefined, statementTimeoutMs(env));
   return { pool, schema };
 };

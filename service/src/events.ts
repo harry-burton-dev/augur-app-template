@@ -43,9 +43,16 @@ export const postgresEvents = (db: Queryable): EventsKept => ({
 export const partEvents = async (app: FastifyInstance, { kept }: { kept: EventsKept }) => {
   app.post<{ Body: DomainEvent }>(
     PART_EVENTS_PATH,
-    { schema: { body: { type: 'object', required: ['seq', 'topic'], properties: { seq: { type: 'string' }, topic: { type: 'string' } } } } },
+    {
+      // Who is calling is checked before the body, so a caller who may not deliver learns nothing about its shape.
+      onRequest: async (req) => {
+        const caller = callerFromHeaders(req.headers);
+        if (!caller) throw new Problem(401, 'unauthorized', 'Events come signed by AUGUR’s events service.');
+        if (serviceOfCaller(caller) !== 'events') throw new Problem(403, 'forbidden', 'Only AUGUR’s events service delivers events here.');
+      },
+      schema: { body: { type: 'object', required: ['seq', 'topic'], properties: { seq: { type: 'string' }, topic: { type: 'string' } } } },
+    },
     async (req, reply) => {
-      if (serviceOfCaller(callerFromHeaders(req.headers)) !== 'events') throw new Problem(403, 'forbidden', 'Only AUGUR’s events service delivers events here.');
       const key = req.headers[IDEMPOTENCY_KEY_HEADER];
       if (typeof key !== 'string' || !key) throw new Problem(400, 'bad_request', `An event comes with an ${IDEMPOTENCY_KEY_HEADER} header, so it is kept once.`);
       const fresh = await kept.keep(key, req.body);

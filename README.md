@@ -103,5 +103,5 @@ with what the app is for.
 | Release | Merging Version packages | The beta release `app/starter@<version>`, then AUGUR's feed lists it |
 
 Every pull request carries a changeset (`pnpm changeset`). The first one, `.changeset/first-release.md`,
-releases the app as 1.0.0. An empty changeset (`pnpm changeset --empty`) never holds back a release. The template repository itself releases nothing: the three release workflows
+releases the app as 0.1.0. An empty changeset (`pnpm changeset --empty`) never holds back a release. The template repository itself releases nothing: the three release workflows
 skip a repository marked as a template.
