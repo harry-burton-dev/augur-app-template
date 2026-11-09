@@ -1,6 +1,6 @@
 ---
-"@apps/starter": major
-"@apps/starter-frontend": major
+"@apps/starter": minor
+"@apps/starter-frontend": minor
 ---
 
-Starter: a new app on AUGUR, on the app contract (contract 3).
+Starter: a new app on AUGUR.
