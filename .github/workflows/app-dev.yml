@@ -5,7 +5,7 @@ name: App dev builds
 on:
   push:
     branches: [main]
-    paths: ['frontend/**', 'service/**', 'manifest.json', 'Dockerfile']
+    paths: ['frontend/**', 'service/**', 'score/**', 'manifest.json', 'Dockerfile']
 concurrency:
   group: app-dev
   cancel-in-progress: false
@@ -48,7 +48,7 @@ jobs:
           version=$(pnpm exec augur-app dev "$GITHUB_RUN_NUMBER")
           pnpm build && pnpm release-out
           pnpm exec augur-app bundle dev > "$RUNNER_TEMP/bundle.json"
-          pnpm exec augur-app publish "$RUNNER_TEMP/bundle.json"
+          node scripts/release.mjs publish "$RUNNER_TEMP/bundle.json"
           pnpm exec augur-app clean-devs "app/$(jq -r .id manifest.json)@$version"
           echo "Dev build $version: a preview server set to take its dev builds installs it at its next check." >> "$GITHUB_STEP_SUMMARY"
         env:

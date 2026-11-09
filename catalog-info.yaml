@@ -12,10 +12,8 @@
       "augur.dev/release-unit": "app/starter",
       "augur.dev/version": "0.0.0",
       "augur.dev/app-id": "starter",
-      "augur.dev/route": "/starter",
-      "augur.dev/sdk-range": "^2.0.0",
       "augur.dev/floors": "personal,team,org",
-      "augur.dev/scopes": ""
+      "augur.dev/scopes": "events:subscribe"
     }
   },
   "spec": {
@@ -30,7 +28,7 @@
   "metadata": {
     "name": "apps-starter-frontend",
     "title": "@apps/starter-frontend",
-    "description": "Starter's micro frontend. Built as one ES module the shell imports from the registry's entry URL.",
+    "description": "Starter's frontend: one ES module the shell runs in a web worker, drawing Quill's remote elements by name.",
     "annotations": {
       "github.com/project-slug": "harry-burton-dev/augur-app-template",
       "backstage.io/source-location": "url:https://github.com/harry-burton-dev/augur-app-template/tree/main/frontend/",
@@ -54,7 +52,7 @@
   "metadata": {
     "name": "apps-starter",
     "title": "@apps/starter",
-    "description": "Starter's service: its API behind the gateway at /api/starter.",
+    "description": "Starter's inbound part: its API behind the gateway at /api/starter, and the events AUGUR pushes to it.",
     "annotations": {
       "github.com/project-slug": "harry-burton-dev/augur-app-template",
       "backstage.io/source-location": "url:https://github.com/harry-burton-dev/augur-app-template/tree/main/service/",
@@ -70,6 +68,7 @@
     "owner": "group:default/augur-core",
     "system": "starter",
     "consumesApis": [
+      "api:default/events-api",
       "api:default/registry-api"
     ],
     "dependsOn": []
