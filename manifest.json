@@ -14,6 +14,7 @@
     "places": [{ "id": "hello", "label": "Hello", "icon": "hand", "path": "/" }],
     "commands": [{ "id": "greeting.again", "label": "Ask again", "icon": "refresh-cw", "keywords": "greeting reload" }],
     "about": [{ "id": "details", "label": "Details", "icon": "info" }],
+    "frame": { "layout": "aside", "width": "read" },
     "settings": [
       { "id": "greeting", "label": "Greeting", "type": "string", "default": "Hello", "detail": "The word the service greets people with" }
     ]
