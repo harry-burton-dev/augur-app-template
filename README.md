@@ -82,7 +82,7 @@ with what the app is for.
 
 | Path | What it is |
 | --- | --- |
-| `manifest.json` | What the shell draws for the app (places, commands, About sections), its settings, the scopes it asks for and the floors it works on (manifest 3). `$schema` points at the schema in `@augur/app-tools`, so your editor checks it; `pnpm check:app` checks it as the registry will |
+| `manifest.json` | What the shell draws for the app (places, commands, About sections, and the layout it opens in: `contributes.frame`, one of the shell's named layouts, never a distance), its settings, the scopes it asks for and the floors it works on (manifest 3). `$schema` points at the schema in `@augur/app-tools`, so your editor checks it; `pnpm check:app` checks it as the registry will |
 | `score/` | One Score file per part: `web` (the inbound service, with its database, setting and scratch folder) and `migrate` (a job that runs the migrations before each install switches over). Each says what the part asks for and its limits; `image: .` is pinned by digest in the release |
 | `catalog-info.yaml` | The app's entry in Backstage's catalog, written from the manifest and the package.json files by `augur-app catalog`. Don't edit it: CI checks it's current (`pnpm check:catalog`) and Version packages rewrites it |
 | `service/` | The image both parts run (`@apps/starter`): `src/app.ts` its routes and `/healthz`, `src/events.ts` the events pushed to it, `src/migrations.ts` its schema, `src/index.ts` and `src/migrate.ts` what each part starts, each reaching the app's database with the service kit's `appDatabaseFromEnv` (none under `pnpm dev:app`) |
