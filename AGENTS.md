@@ -13,7 +13,7 @@ an empty changeset (`pnpm changeset --empty`), so `.changeset/first-release.md` 
 
 ## Where to look
 - AUGUR's decisions (ADRs and PDRs) in the Decision register, in the AUGUR handbook on Google Drive
-  (`04 Decisions`, https://drive.google.com/drive/folders/16wXmUMRNP2_vXAlf4kBMF9hCDNUXg7yO), especially 0012 (apps in their own repositories), 0015
+  (`04 Decisions`, https://drive.google.com/drive/folders/16wXmUMRNP2_vXAlf4kBMF9hCDNUXg7yO), especially 0077 (apps in their own repositories), 0015
   (React, Quill, Tailwind), 0047 (how this repository releases) and 0055 (one source per API).
 - AUGUR's `docs/build-an-app.md`: the SDK, the service kit and the stand-in shell.
 - This repository's own decisions are in the same register, under its name. Records are never written into
